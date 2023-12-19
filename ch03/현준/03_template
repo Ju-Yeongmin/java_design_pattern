@@ -1,0 +1,127 @@
+#ch03. Template
+
+### Template 패턴
+=> 전체적인 형태? 흐름을 정해서 큰 흐름은 정해져있고 세부적인 내용은 하위 부분에서 처리하는 것
+
+상위 class ( 추상 ) : 뼈대 -> AstractClass
+하위 class ( 상속 ) : 구체적인 내용 -> ConcreteClass
+
+** Char Display class
+```java
+public abstract class AbstractDisplay {
+
+  public abstract void open() ;
+  public abstract void print() ;
+  public abstract void close() ;
+
+  public final void display(){
+
+  open() ;
+
+  for( int i = 0 ; i < 5 ; ++i ){
+      print();
+  }
+
+  close() ;
+  }
+}
+
+```
+
+**CharDisplay
+```java
+public class CharDisplay extends AbstractDisplay{
+
+  private char ch ;
+
+  public CharDisplay( char ch ) {
+      this.ch = ch ;
+  }
+
+
+  @Override
+  public void open() {
+
+      System.out.print( "<<" ) ;
+  }
+
+  @Override
+  public void print() {
+
+      System.out.print( ch ) ;
+  }
+
+  @Override
+  public void close() {
+
+      System.out.println( ">>" ) ;
+  }
+}
+
+```
+
+**StringDisplay
+```java
+public class StringDisplay extends AbstractDisplay{
+
+    private String string ;
+    private int width ;
+
+    public StringDisplay( String string ) {
+        this.string = string ;
+        this.width = string.length() ;
+    }
+
+    @Override
+    public void open() {
+
+        printLine() ;
+    }
+
+    @Override
+    public void print() {
+
+        System.out.println( "|" + string + "|" ) ;
+    }
+
+    @Override
+    public void close() {
+
+        printLine() ;
+    }
+
+    private void printLine(){
+
+        System.out.print( "+" ) ;
+
+        for( int i = 0 ; i < width ; ++i ){
+
+            System.out.print( "-" ) ;
+        }
+
+        System.out.println( "+" ) ;
+    }
+}
+
+```
+
+**Main
+```java
+public class Main {
+    public static void main( String[] args ){
+
+    AbstractDisplay d1 = new CharDisplay( 'H' ) ;
+
+    AbstractDisplay d2 = new StringDisplay( "HELLO" ) ;
+
+    d1.display() ;
+    d2.display() ;
+  }
+}
+
+```
+
+template 특징
+1. 로직을 공통화할 수 있다 -> 템플릿 메소드만 수정하면 전체 내용을 한 번에 변경 가능
+2. 상위 클래스와 하위 클래스가 연계되어 움직임 -> 상위 클래스의 내용을 알아야 하위 부분을 구현할 수 있음
+3. 하위 클래스를 상위 클래스와 동일시한다 -> 어떤 자료형이든 상관없이 사용 가능
